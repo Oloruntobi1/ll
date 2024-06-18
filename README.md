@@ -1,0 +1,1 @@
+This will assist in my low-level learning journey. It contains very useful things I don't have to do over and over again.
