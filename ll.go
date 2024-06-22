@@ -6,20 +6,9 @@ import (
 )
 
 // DerefUnsafePointer retrieves the value stored at a given memory address.
-// This function is useful when you have determined the address of a variable
-// using the unsafe.Pointer(&x) method and you want to know the value stored
-// at that address.
-//
-// Example usage:
-//
-//	address := unsafe.Pointer(&x)
-//	value := DerefUnsafePointer(address)
-//
-// Parameters:
-//   - address: The memory address to dereference, represented as an unsafe.Pointer.
-//
-// Returns:
-//   - byte: The value stored at the specified memory address.
+// This function is useful after you have determined the address of a variable
+// using the unsafe.Pointer(&x) method and you subsequently wish to know the
+// actual value stored at that address.
 //
 // NOTE:
 //   - Every address points to exactly one byte and one byte of data alone.
@@ -37,24 +26,25 @@ func DerefUnsafePointer(address unsafe.Pointer) byte {
 //   - systemAllocatedBytes: The number of bytes to be printed from the starting address.
 //
 // Output:
-// The function prints a table with three columns:
+// The function prints a table with four columns:
 //   - Memory Address: The address of the current byte in memory.
 //   - Hex Value: The value of the byte in hexadecimal format.
+//   - Decimal Value: The value of the byte in decimal format.
 //   - Binary Value: The value of the byte in binary format.
 //
 // Example output:
-// Memory Address   | Hex Value | Binary Value
-// -----------------|-----------|-------------
-// 0x12345678       | 0x1f      | 00011111
-// 0x12345679       | 0xa0      | 10100000
+// Memory Address   | Hex Value | Decimal Value | Binary Value
+// -----------------|-----------|---------------|-------------
+// 0x12345678       | 0x1f      |       31      | 00011111
+// 0x12345679       | 0xa0      |      160      | 10100000
 // ...
 func PrintMemoryAndData(firstByteAddress unsafe.Pointer, systemAllocatedBytes uintptr) {
-	fmt.Println("Memory Address   | Hex Value | Binary Value")
-	fmt.Println("-----------------|-----------|-------------")
+	fmt.Println("Memory Address   | Hex Value | Decimal Value | Binary Value")
+	fmt.Println("-----------------|-----------|---------------|-------------")
 	for i := uintptr(0); i < systemAllocatedBytes; i++ {
 		address := (*byte)(unsafe.Pointer(uintptr(firstByteAddress) + i))
 		byteValue := *address
-		fmt.Printf("%p  |   0x%02x    |  %08b\n", address, byteValue, byteValue)
+		fmt.Printf("%p    |   0x%02x    |       %v       |  %08b\n", address, byteValue, byteValue, byteValue)
 	}
 }
 
@@ -67,16 +57,17 @@ func PrintMemoryAndData(firstByteAddress unsafe.Pointer, systemAllocatedBytes ui
 //   - value: The integer whose memory representation will be printed.
 //
 // Output:
-// The function prints a table with three columns:
+// The function prints a table with four columns:
 //   - Memory Address: The address of the current byte in memory.
 //   - Hex Value: The value of the byte in hexadecimal format.
+//   - Decimal Value: The value of the byte in decimal format.
 //   - Binary Value: The value of the byte in binary format.
 //
 // Example output:
-// Memory Address   | Hex Value | Binary Value
-// -----------------|-----------|-------------
-// 0x12345678       | 0x1f      | 00011111
-// 0x12345679       | 0xa0      | 10100000
+// Memory Address   | Hex Value | Decimal Value | Binary Value
+// -----------------|-----------|---------------|-------------
+// 0x12345678       | 0x1f      |       31      | 00011111
+// 0x12345679       | 0xa0      |      160      | 10100000
 // ...
 func PrintIntMemoryAndData(value int) {
 	// Determine the number of bytes allocated for the integer
